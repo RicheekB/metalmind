@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load market_extras %}
+
+{% block title %}{{ asset.name }} - MetalMind{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'dashboard' %}">&larr; Back to Dashboard</a>
+</div>
+
+<h1>{{ asset.name }} ({{ asset.symbol }})</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5>Latest Price</h5>
+                {% if snapshot %}
+                <h2>${{ snapshot.price|currency }}</h2>
+                <p>Updated: <span class="local-time" data-iso="{{ snapshot.as_of|date:'c' }}">{{ snapshot.as_of|date:"M
+                        d, Y H:i" }} UTC</span></p>
+                {% else %}
+                <p>No data</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Trend</h5>
+                <h3>{{ trend }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Volatility</h5>
+                <h3>{{ volatility }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <canvas id="priceChart"></canvas>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ chart_data|json_script:"chart-data" }}
+<script>
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const chartData = JSON.parse(document.getElementById('chart-data').textContent);
+
+    // chart_data keys: labels (dates), closes (prices)
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Price (USD)',
+                data: chartData.closes,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    // Local time conversion
+    document.addEventListener('DOMContentLoaded', function () {
+        const timeElements = document.querySelectorAll('.local-time');
+        timeElements.forEach(el => {
+            const isoTime = el.getAttribute('data-iso');
+            if (isoTime) {
+                const date = new Date(isoTime);
+                el.textContent = date.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
