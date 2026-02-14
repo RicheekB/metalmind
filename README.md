@@ -94,7 +94,7 @@ Follow these steps to get MetalMind running on your machine:
 
 ## 📸 Screenshots
 
-![Dashboard](https://imgur.com/a/KOwNcqy)
+![Dashboard](docs/screenshots/dashboard_v0.1.svg)
 _Dashboard Interface_
 
 ![Asset Detail](docs/screenshots/asset_detail_v0.1.svg)
