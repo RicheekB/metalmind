@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Asset(models.Model):
     slug = models.SlugField(primary_key=True)
@@ -26,5 +27,14 @@ class PriceCandle(models.Model):
     class Meta:
         unique_together = (('asset', 'date'),)
 
+class PortfolioItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=10, decimal_places=4)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'asset')
+
     def __str__(self):
-        return f"{self.asset.symbol} on {self.date}"
+        return f"{self.user.username} - {self.asset.symbol}: {self.quantity}"

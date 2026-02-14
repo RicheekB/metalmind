@@ -5,12 +5,48 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Market Dashboard</h1>
-    <form action="{% url 'api_update' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Update Data</button>
-    </form>
+    <h1>Dashboard</h1>
+    <div>
+        <a href="{% url 'manage_portfolio' %}" class="btn btn-outline-secondary me-2">Manage Portfolio</a>
+        <form action="{% url 'api_update' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Update Data</button>
+        </form>
+    </div>
 </div>
+
+{% if portfolio_items %}
+<div class="card mb-4 border-success">
+    <div class="card-body">
+        <h3 class="card-title text-success">Total Portfolio Value: ${{ portfolio_value|floatform:2 }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Quantity</th>
+                    <th>Current Price</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in portfolio_items %}
+                    <tr>
+                        <td>{{ item.asset.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        {% with snapshot=snapshots|get_item:item.asset.slug %}
+                            <td>${{ snapshot.price|floatform:2 }}</td>
+                            <td>${% widthratio item.quantity 1 snapshot.price %} (approx)</td>
+                        {% endwith %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<h2>Market Overview</h2>
+
 
 <div class="row">
     {% for asset in assets %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
-from .models import Asset, PriceCandle, PriceSnapshot
+from .models import Asset, PriceCandle, PriceSnapshot, PortfolioItem
 from .services.metrics import calculate_trend, calculate_volatility
 from .services.update_data import update_all_assets
 from datetime import timedelta, date
@@ -12,7 +12,45 @@ from decimal import Decimal
 def dashboard(request):
     assets = Asset.objects.all()
     snapshots = {a.slug: PriceSnapshot.objects.filter(asset=a).order_by('-as_of').first() for a in assets}
-    return render(request, 'market/dashboard.html', {'assets': assets, 'snapshots': snapshots})
+    
+    # Portfolio Calculation
+    portfolio_items = PortfolioItem.objects.filter(user=request.user)
+    portfolio_value = Decimal(0)
+    for item in portfolio_items:
+        snap = snapshots.get(item.asset.slug)
+        if snap:
+            portfolio_value += item.quantity * snap.price
+            
+    return render(request, 'market/dashboard.html', {
+        'assets': assets, 
+        'snapshots': snapshots,
+        'portfolio_items': portfolio_items,
+        'portfolio_value': portfolio_value
+    })
+
+@login_required
+def manage_portfolio(request):
+    items = PortfolioItem.objects.filter(user=request.user)
+    assets = Asset.objects.all()
+    
+    if request.method == 'POST':
+        asset_slug = request.POST.get('asset')
+        quantity = request.POST.get('quantity')
+        action = request.POST.get('action') # 'update' or 'delete'
+
+        asset = get_object_or_404(Asset, slug=asset_slug)
+        
+        if action == 'delete':
+            PortfolioItem.objects.filter(user=request.user, asset=asset).delete()
+        else:
+            PortfolioItem.objects.update_or_create(
+                user=request.user, 
+                asset=asset,
+                defaults={'quantity': Decimal(quantity)}
+            )
+        return redirect('dashboard')
+
+    return render(request, 'market/manage_portfolio.html', {'items': items, 'assets': assets})
 
 @login_required
 def asset_detail(request, slug):
