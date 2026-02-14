@@ -1,69 +1,113 @@
-# MetalMind
+# MetalMind 🪙🧠
 
-MetalMind is a Django-based web application for tracking asset prices (Gold and Silver) with a dashboard and detailed charts.
+**MetalMind** is a beginner-friendly Django web application designed to track asset prices like Gold and Silver. It features a clean dashboard, interactive charts, and automated trend analysis to help users visualize market movements.
 
-## v0.1 Features
+---
 
-- User authentication (Signup/Login/Logout).
-- Dashboard with latest asset prices and 24h change.
-- Asset detail pages with 5-day price charts (Chart.js), trend analysis, and volatility metrics.
-- Mock data generation service.
-- REST API endpoints for assets and candles.
+## 🚀 Features
 
-## Setup
+- **User Authentication**: Secure Login and Signup flows.
+- **Interactive Dashboard**: View real-time asset prices and daily changes at a glance.
+- **Smart Metrics**: Automated calculation of **Trend** (Up/Down/Sideways) and **Volatility** (High/Medium/Low).
+- **Visual Charts**: 5-day price history visualization using **Chart.js**.
+- **Mock Data Generator**: Built-in simulation tool to generate realistic market data for testing.
+- **Manual Updates**: "Update Data" button to trigger fresh data fetch (mocked for v0.1).
 
-1. **Prerequisites**: Python 3.10+ installed.
+---
 
-2. **Clone the repository**:
+## 🛠️ Tech Stack
 
-   ```bash
-   git clone https://github.com/RicheekB/metalmind.git
-   cd metalmind
-   ```
+- **Backend**: Python, Django 4.x
+- **Database**: SQLite (easy setup)
+- **Frontend**: HTML5, Bootstrap 5
+- **Visualization**: Chart.js
+- **Version Control**: Git & GitHub
 
-3. **Install dependencies**:
+---
 
-   ```bash
-   pip install django
-   ```
+## 💻 Local Setup
 
-4. **Apply migrations**:
+Follow these steps to get MetalMind running on your machine:
 
-   ```bash
-   python manage.py migrate
-   ```
+1.  **Clone the repository:**
 
-5. **Create a superuser** (optional, for admin access):
+    ```bash
+    git clone https://github.com/RicheekB/metalmind.git
+    cd metalmind
+    ```
 
-   ```bash
-   python manage.py createsuperuser
-   ```
+2.  **Set up a virtual environment (recommended):**
 
-6. **Run the development server**:
-   ```bash
-   python manage.py runserver
-   ```
-   Access the app at http://127.0.0.1:8000/.
+    ```bash
+    python -m venv venv
+    # Windows
+    venv\Scripts\activate
+    # Mac/Linux
+    source venv/bin/activate
+    ```
 
-## Data Updates
+3.  **Install dependencies:**
 
-**Note**: v0.1 uses a **mock data provider**. Real-time data integration will be added in v0.1.1.
+    ```bash
+    pip install django
+    ```
 
-To generate/update mock data:
+4.  **Initialize the database:**
 
-1. **Via UI**: Log in and click "Update Data" on the dashboard.
-2. **Via Command Line**:
-   ```bash
-   python manage.py update_prices --days 5
-   ```
+    ```bash
+    python manage.py migrate
+    ```
 
-## Development
+5.  **Generate mock data:**
 
-- **Run Tests**:
-  ```bash
-  python manage.py test market
-  ```
+    ```bash
+    python manage.py update_prices --days 5
+    ```
 
-## License
+6.  **Run the server:**
+    ```bash
+    python manage.py runserver
+    ```
+    Open your browser at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-MIT
+---
+
+## 📂 Project Structure
+
+- `accounts/`: Handles user authentication (login, signup, logout).
+- `market/`: Core app logic for assets, prices, and metrics.
+- `market/services/`: Business logic (data updates, math for trends/volatility).
+- `templates/`: HTML files using Bootstrap and Django Template Language.
+- `manage.py`: Django's command-line utility.
+
+---
+
+## 🗺️ Roadmap
+
+- **v0.1**: Initial Release (Mock Data) ✅
+- **v0.3**: Comprehensive Unit & Integration Tests 🚧
+- **v0.4**: Docker Support & MySQL Migration
+- **v0.5**: Integration with Real-Time Price API (e.g., AlphaVantage)
+- **v0.6**: AI-Powered Market Summaries
+
+---
+
+## 📸 Screenshots
+
+![Dashboard](docs/screenshots/dashboard_v0.1.png)
+_Dashboard Interface_
+
+![Asset Detail](docs/screenshots/asset_detail_v0.1.png)
+_Asset Detail with Chart_
+
+---
+
+## 👤 Creator
+
+Created by **Richeek Basu**.
+
+View on [GitHub](https://github.com/RicheekB)
+
+---
+
+_License: MIT_
