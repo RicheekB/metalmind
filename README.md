@@ -94,10 +94,10 @@ Follow these steps to get MetalMind running on your machine:
 
 ## 📸 Screenshots
 
-![Dashboard](docs/screenshots/dashboard_v0.1.png)
+![Dashboard](docs/screenshots/dashboard_v0.1.svg)
 _Dashboard Interface_
 
-![Asset Detail](docs/screenshots/asset_detail_v0.1.png)
+![Asset Detail](docs/screenshots/asset_detail_v0.1.svg)
 _Asset Detail with Chart_
 
 ---
