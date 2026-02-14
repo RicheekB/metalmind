@@ -85,8 +85,9 @@ Follow these steps to get MetalMind running on your machine:
 ## 🗺️ Roadmap
 
 - **v0.1**: Initial Release (Mock Data) ✅
-- **v0.2**: User Settings & Enhanced Dashboard
-- **v0.3**: Comprehensive Unit & Integration Tests 🚧
+- [x] **v0.2: User Settings & Portfolio** (Profiles, Portfolio Tracking, Dashboard Integration)
+- [ ] **v0.3: Testing & Quality Assurance** (Unit Tests, Integration Tests, CI/CD)
+      🚧
 - **v0.4**: Docker Support & MySQL Migration
 - **v0.5**: Integration with Real-Time Price API (e.g., AlphaVantage)
 - **v0.6**: AI-Powered Market Summaries

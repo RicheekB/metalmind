@@ -30,7 +30,7 @@ class PriceCandle(models.Model):
 class PortfolioItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=10, decimal_places=4)
+    quantity = models.DecimalField(max_digits=20, decimal_places=4)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

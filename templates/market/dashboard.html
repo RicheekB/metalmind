@@ -18,7 +18,7 @@
 {% if portfolio_items %}
 <div class="card mb-4 border-success">
     <div class="card-body">
-        <h3 class="card-title text-success">Total Portfolio Value: ${{ portfolio_value|floatform:2 }}</h3>
+        <h3 class="card-title text-success">Total Portfolio Value: ${{ portfolio_value|currency }}</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -34,7 +34,7 @@
                         <td>{{ item.asset.name }}</td>
                         <td>{{ item.quantity }}</td>
                         {% with snapshot=snapshots|get_item:item.asset.slug %}
-                            <td>${{ snapshot.price|floatform:2 }}</td>
+                            <td>${{ snapshot.price|currency }}</td>
                             <td>${% widthratio item.quantity 1 snapshot.price %} (approx)</td>
                         {% endwith %}
                     </tr>

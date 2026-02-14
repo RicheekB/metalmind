@@ -11,6 +11,7 @@ All notable changes to the MetalMind project will be documented in this file.
 - **Platinum & Palladium Support**: Added `platinum` (XPT) and `palladium` (XPD) to the list of tracked assets in `market/services/update_data.py`.
 - **Local Timezone Display**: Implemented frontend logic to automatically convert UTC timestamps to the user's local browser time on Dashboard and Asset Detail pages.
 - **Management Command**: Added `--clear` flag to `update_prices` command to wipe existing data before generating new entries.
+- **Robust Validation**: Implemented `PortfolioItemForm` to handle large number inputs gracefully and prevent server errors.
 
 ### 🎨 UI/UX Improvements
 

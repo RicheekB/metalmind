@@ -28,29 +28,47 @@ def dashboard(request):
         'portfolio_value': portfolio_value
     })
 
+from .forms import PortfolioItemForm
+
 @login_required
 def manage_portfolio(request):
     items = PortfolioItem.objects.filter(user=request.user)
-    assets = Asset.objects.all()
     
     if request.method == 'POST':
-        asset_slug = request.POST.get('asset')
-        quantity = request.POST.get('quantity')
-        action = request.POST.get('action') # 'update' or 'delete'
-
-        asset = get_object_or_404(Asset, slug=asset_slug)
+        action = request.POST.get('action')
         
         if action == 'delete':
+            asset_slug = request.POST.get('asset')
+            asset = get_object_or_404(Asset, slug=asset_slug)
             PortfolioItem.objects.filter(user=request.user, asset=asset).delete()
-        else:
-            PortfolioItem.objects.update_or_create(
-                user=request.user, 
-                asset=asset,
-                defaults={'quantity': Decimal(quantity)}
-            )
-        return redirect('dashboard')
+            return redirect('manage_portfolio')
+        
+        # Handle Add/Update via Form
+        # We need to handle 'update_or_create' logic with a Form manually or carefully.
+        # Since the UniqueConstraint is on (user, asset), standard ModelForm.save() might fail if entry exists?
+        # Actually ModelForm is good for creating or updating ONE instance. Here we might be creating OR updating.
+        # Let's try to fetch instance first if it exists.
+        
+        asset_slug = request.POST.get('asset')
+        instance = None
+        if asset_slug:
+            instance = PortfolioItem.objects.filter(user=request.user, asset__slug=asset_slug).first()
+            
+        form = PortfolioItemForm(request.POST, instance=instance)
+        
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            return redirect('dashboard')
+    else:
+        form = PortfolioItemForm()
 
-    return render(request, 'market/manage_portfolio.html', {'items': items, 'assets': assets})
+    # Pass existing assets for the dropdown if we want to build it manually or use form
+    # The form renders the dropdown but we want to customize potentially?
+    # Form's 'asset' field will list all assets.
+    
+    return render(request, 'market/manage_portfolio.html', {'items': items, 'form': form})
 
 @login_required
 def asset_detail(request, slug):

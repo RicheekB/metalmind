@@ -17,18 +17,27 @@
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="update">
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
                 <div class="mb-3">
-                    <label for="asset" class="form-label">Asset</label>
-                    <select name="asset" id="asset" class="form-select" required>
-                        {% for asset in assets %}
-                            <option value="{{ asset.slug }}">{{ asset.name }} ({{ asset.symbol }})</option>
-                        {% endfor %}
-                    </select>
+                    <label for="{{ form.asset.id_for_label }}" class="form-label">Asset</label>
+                    {{ form.asset }}
+                    {% if form.asset.errors %}
+                        <div class="text-danger">{{ form.asset.errors }}</div>
+                    {% endif %}
                 </div>
+
                 <div class="mb-3">
-                    <label for="quantity" class="form-label">Quantity</label>
-                    <input type="number" step="0.0001" name="quantity" id="quantity" class="form-control" required>
+                    <label for="{{ form.quantity.id_for_label }}" class="form-label">Quantity</label>
+                    {{ form.quantity }}
+                    {% if form.quantity.errors %}
+                        <div class="text-danger">{{ form.quantity.errors }}</div>
+                    {% endif %}
                 </div>
+                
                 <button type="submit" class="btn btn-success">Save Holding</button>
             </form>
         </div>
