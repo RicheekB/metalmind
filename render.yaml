@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: metalmind
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn metalmind.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "metalmind.onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: metalmind-db
+          property: connectionString

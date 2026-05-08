@@ -72,6 +72,21 @@ Follow these steps to get MetalMind running on your machine:
 
 ---
 
+## ☁️ Deployment on Render
+
+MetalMind is configured for easy deployment on Render as a Web Service.
+
+1. Push your code to GitHub.
+2. On Render, connect your repository.
+3. Render will automatically detect the `render.yaml` file to configure the service.
+4. Ensure the following Environment Variables are set in the Render Dashboard:
+   - `SECRET_KEY` (generated automatically if using `render.yaml`)
+   - `DEBUG` (set to `False`)
+   - `ALLOWED_HOSTS` (e.g., `metalmind.onrender.com`)
+   - `DATABASE_URL` (if using a Render PostgreSQL database)
+
+---
+
 ## 📂 Project Structure
 
 - `accounts/`: Handles user authentication (login, signup, logout).
